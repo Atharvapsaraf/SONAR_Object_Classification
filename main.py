@@ -21,9 +21,15 @@ def main():
 
     classifier = MLPClassifier(random_state=0)
     classifier.fit(X_train, y_train)
-    y_pred = classifier.predict(X_test)
-    print(f'Accuracy: {(y_pred == y_test).mean()}')
-    display_accuracy(y_test, y_pred, ["Rock", "Mine"], "Confusion matrix")
+
+    y_pred_train = classifier.predict(X_train)
+    print(f'Test Accuracy: {(y_pred_train == y_train).mean()}')
+    display_accuracy(y_train, y_pred_train, ["Rock", "Mine"], "Confusion matrix")
+
+    y_pred_test = classifier.predict(X_test)
+    print(f'Test Accuracy: {(y_pred_test == y_test).mean()}')
+    display_accuracy(y_test, y_pred_test, ["Rock", "Mine"], "Confusion matrix")
+
 
 if __name__ == '__main__':
     main()

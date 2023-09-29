@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import ConfusionMatrixDisplay, confusion_matrix
 import matplotlib.pyplot as plt
 import numpy as np
-
+from sklearn.ensemble import RandomForestClassifier
 
 def display_accuracy(target, predictions, labels, title):
     cm = confusion_matrix(target, predictions)
@@ -15,15 +15,23 @@ def display_accuracy(target, predictions, labels, title):
 
 
 def main():
+    # setting up train and test set
     inputs = np.genfromtxt('sonar.all-data.csv', usecols=range(60), delimiter=',')
     target = np.genfromtxt('sonar.all-data.csv', usecols=[60], dtype=np.dtype('U1'), delimiter=',') == 'M'
     X_train, X_test, y_train, y_test = train_test_split(inputs, target, test_size=0.2, random_state=42)
 
-    classifier = MLPClassifier(random_state=0)
+    # Nearal Network Model
+    #classifier = MLPClassifier(random_state=42, hidden_layer_sizes=30, batch_size= 10, max_iter= 500)
+    #classifier.fit(X_train, y_train)
+
+    # random forest classifier
+    classifier = RandomForestClassifier(random_state=42, n_estimators= 500)
     classifier.fit(X_train, y_train)
 
+
+    # predictions
     y_pred_train = classifier.predict(X_train)
-    print(f'Test Accuracy: {(y_pred_train == y_train).mean()}')
+    print(f'Train Accuracy: {(y_pred_train == y_train).mean()}')
     display_accuracy(y_train, y_pred_train, ["Rock", "Mine"], "Confusion matrix")
 
     y_pred_test = classifier.predict(X_test)

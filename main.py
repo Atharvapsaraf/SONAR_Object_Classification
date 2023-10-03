@@ -35,22 +35,53 @@ def main():
     X_train, X_test, y_train, y_test = train_test_split(inputs, target, test_size=0.2, random_state=42)
 
     num_layer_increase_losses = []
-    for hls in tqdm([(30,) * i for i in range(1, 10)], desc='Training Neural Networks with increasing number of layers'):
+    num_layers = [(30,) * i for i in range(1, 10)]
+    for hls in tqdm(num_layers, desc='Training Neural Networks with increasing number of layers'):
         num_layer_increase_losses.append(evaluate(MLPClassifier(
-            random_state=0, hidden_layer_sizes=hls, batch_size=10, max_iter=500
+            random_state=0, hidden_layer_sizes=hls, batch_size=10, max_iter=50
         ), X_train, X_test, y_train, y_test))
 
     size_layer_increase_losses = []
-    for hls in tqdm([(10 * i, 10 * i) for i in range(1, 10)], 'Training Neural Networks with increasing size of layers'):
+    layer_sizes = [(10 * i, 10 * i) for i in range(1, 10)]
+    for hls in tqdm(layer_sizes, 'Training Neural Networks with increasing size of layers'):
         size_layer_increase_losses.append(evaluate(MLPClassifier(
-            random_state=0, hidden_layer_sizes=hls, batch_size=10, max_iter=500
+            random_state=0, hidden_layer_sizes=hls, batch_size=10, max_iter=50
         ), X_train, X_test, y_train, y_test))
 
-    plt.plot(range(len(num_layer_increase_losses)), num_layer_increase_losses, color='blue', name='Increasing number of layers with 30 units')
-    plt.plot(range(len(size_layer_increase_losses)), size_layer_increase_losses, color='blue', name='Increasing size of 2 layers by multiples of 10')
-    plt.xlabel('Number of Layers')
-    plt.ylabel('Loss')
-    plt.legend()
+
+    # fig, ax1 = plt.subplots()
+    # ax1.plot(range(len(num_layer_increase_losses)), num_layer_increase_losses, color='blue', label='Increasing number of layers with 30 units')
+    # ax1.xlabel('Number of Layers')
+    # ax1.ylabel('Loss')
+    # ax1.legend()
+    # ax2 = ax1.twiny()
+    # ax1.plot(range(len(size_layer_increase_losses)), size_layer_increase_losses, color='red', label='Increasing size of 2 layers by multiples of 10')
+    # plt.show()
+
+
+    # Your specific ticks for the x-axes
+    num_layer_ticks = [len(t) for t in num_layers]  # Your x-ticks for ax1
+    size_layer_ticks = layer_sizes  # Your x-ticks for ax2
+
+    fig, ax1 = plt.subplots()
+
+    # First plot and its x-axis
+    print(num_layer_ticks)
+    print(num_layer_increase_losses)
+    ax1.plot(num_layer_ticks, num_layer_increase_losses, color='blue', label='Increasing number of layers with 30 units')
+    ax1.set_xlabel('Number of Layers')
+    ax1.set_ylabel('Loss')
+    ax1.legend(loc='upper left')
+
+    # Create a second x-axis and plot the second line on the same y-axis
+    ax2 = ax1.twiny()
+    ax2.plot(size_layer_ticks, size_layer_increase_losses, color='red',
+         label='Increasing size of 2 layers by multiples of 10')
+    ax2.set_xlabel('Size of Layers')
+
+    # Optionally, you may want to add this second legend. If you add this legend, consider adjusting the loc argument in both legends to avoid overlap.
+    ax2.legend(loc='upper right')
+
     plt.show()
 
 if __name__ == '__main__':

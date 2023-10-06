@@ -28,6 +28,35 @@ def evaluate(model, X_train, X_test, y_train, y_test, display_matrix=False):
 
     return model.best_loss_
 
+def display_loss_curves(num_layers, layer_sizes, num_layer_increase_losses, size_layer_increase_losses):
+    # Your specific ticks for the x-axes
+    num_layer_ticks = [len(t) for t in num_layers]  # Your x-ticks for ax1
+    size_layer_ticks = layer_sizes  # Your x-ticks for ax2
+
+    fig, ax1 = plt.subplots()
+    ax2 = ax1.twiny()
+
+    # First plot and its x-axis
+    ax1.plot(
+        num_layer_ticks, num_layer_increase_losses, color='blue',
+        label='Increasing number of layers with 30 units'
+    )
+    ax1.set_xlabel('Number of Layers')
+    ax1.set_ylabel('Loss')
+
+    # Create a second x-axis and plot the second line on the same y-axis
+    ax2.plot(
+        size_layer_ticks, size_layer_increase_losses, color='red',
+        label='Increasing size of 2 layers by multiples of 10'
+    )
+    ax2.set_xlabel('Size of Layers')
+
+    # Optionally, you may want to add this second legend. If you add this legend, consider adjusting the loc argument in both legends to avoid overlap.
+    plt.legend(loc='upper right')
+
+    plt.show()
+
+
 def main():
     # setting up train and test set
     inputs = np.genfromtxt('sonar.all-data.csv', usecols=range(60), delimiter=',')
@@ -48,41 +77,7 @@ def main():
             random_state=0, hidden_layer_sizes=hls, batch_size=10, max_iter=50
         ), X_train, X_test, y_train, y_test))
 
-
-    # fig, ax1 = plt.subplots()
-    # ax1.plot(range(len(num_layer_increase_losses)), num_layer_increase_losses, color='blue', label='Increasing number of layers with 30 units')
-    # ax1.xlabel('Number of Layers')
-    # ax1.ylabel('Loss')
-    # ax1.legend()
-    # ax2 = ax1.twiny()
-    # ax1.plot(range(len(size_layer_increase_losses)), size_layer_increase_losses, color='red', label='Increasing size of 2 layers by multiples of 10')
-    # plt.show()
-
-
-    # Your specific ticks for the x-axes
-    num_layer_ticks = [len(t) for t in num_layers]  # Your x-ticks for ax1
-    size_layer_ticks = layer_sizes  # Your x-ticks for ax2
-
-    fig, ax1 = plt.subplots()
-
-    # First plot and its x-axis
-    print(num_layer_ticks)
-    print(num_layer_increase_losses)
-    ax1.plot(num_layer_ticks, num_layer_increase_losses, color='blue', label='Increasing number of layers with 30 units')
-    ax1.set_xlabel('Number of Layers')
-    ax1.set_ylabel('Loss')
-    ax1.legend(loc='upper left')
-
-    # Create a second x-axis and plot the second line on the same y-axis
-    ax2 = ax1.twiny()
-    ax2.plot(size_layer_ticks, size_layer_increase_losses, color='red',
-         label='Increasing size of 2 layers by multiples of 10')
-    ax2.set_xlabel('Size of Layers')
-
-    # Optionally, you may want to add this second legend. If you add this legend, consider adjusting the loc argument in both legends to avoid overlap.
-    ax2.legend(loc='upper right')
-
-    plt.show()
+    display_loss_curves(num_layers, layer_sizes, num_layer_increase_losses, size_layer_increase_losses)
 
 if __name__ == '__main__':
     main()

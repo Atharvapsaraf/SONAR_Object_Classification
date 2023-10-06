@@ -56,6 +56,12 @@ def display_loss_curves(num_layers, layer_sizes, num_layer_increase_losses, size
 
     plt.show()
 
+def display_sonar_time_series(inputs, target):
+    plt.plot(range(len(inputs[0])), inputs[0])
+    plt.title ("SONAR readings")
+    plt.xlabel("Number of readings")
+    plt.ylabel("reading")
+    plt.show()
 
 def main():
     # setting up train and test set
@@ -65,6 +71,9 @@ def main():
 
     num_layer_increase_losses = []
     num_layers = [(30,) * i for i in range(1, 10)]
+
+    display_sonar_time_series(inputs, target)
+
     for hls in tqdm(num_layers, desc='Training Neural Networks with increasing number of layers'):
         num_layer_increase_losses.append(evaluate(MLPClassifier(
             random_state=0, hidden_layer_sizes=hls, batch_size=10, max_iter=50
@@ -77,7 +86,7 @@ def main():
             random_state=0, hidden_layer_sizes=hls, batch_size=10, max_iter=50
         ), X_train, X_test, y_train, y_test))
 
-    display_loss_curves(num_layers, layer_sizes, num_layer_increase_losses, size_layer_increase_losses)
+    # display_loss_curves(num_layers, layer_sizes, num_layer_increase_losses, size_layer_increase_losses)
 
 if __name__ == '__main__':
     main()

@@ -13,7 +13,7 @@ def display_accuracy(target, predictions, labels, title):
     ax.set_title(title)
     plt.show()
 
-def evaluate(model, X_train, X_test, y_train, y_test, display_matrix=False):
+def evaluate(model, X_train, X_test, y_train, y_test, display_matrix=True):
     model.fit(X_train, y_train)
 
     y_pred_train = model.predict(X_train)
@@ -58,9 +58,9 @@ def display_loss_curves(num_layers, layer_sizes, num_layer_increase_losses, size
 
 def display_sonar_time_series(inputs, target):
     plt.plot(range(len(inputs[0])), inputs[0])
-    plt.title ("SONAR readings")
+    plt.title ("SONAR Datset")
     plt.xlabel("Number of readings")
-    plt.ylabel("reading")
+    plt.ylabel("Energy in particular bands")
     plt.show()
 
 def main():
@@ -76,17 +76,17 @@ def main():
 
     for hls in tqdm(num_layers, desc='Training Neural Networks with increasing number of layers'):
         num_layer_increase_losses.append(evaluate(MLPClassifier(
-            random_state=0, hidden_layer_sizes=hls, batch_size=10, max_iter=50
+            random_state=0, hidden_layer_sizes=hls, batch_size=10, max_iter=500
         ), X_train, X_test, y_train, y_test))
 
     size_layer_increase_losses = []
     layer_sizes = [(10 * i, 10 * i) for i in range(1, 10)]
     for hls in tqdm(layer_sizes, 'Training Neural Networks with increasing size of layers'):
         size_layer_increase_losses.append(evaluate(MLPClassifier(
-            random_state=0, hidden_layer_sizes=hls, batch_size=10, max_iter=50
+            random_state=0, hidden_layer_sizes=hls, batch_size=10, max_iter=500
         ), X_train, X_test, y_train, y_test))
 
-    # display_loss_curves(num_layers, layer_sizes, num_layer_increase_losses, size_layer_increase_losses)
+    display_loss_curves(num_layers, layer_sizes, num_layer_increase_losses, size_layer_increase_losses)
 
 if __name__ == '__main__':
     main()

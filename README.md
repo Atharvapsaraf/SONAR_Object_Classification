@@ -1,4 +1,4 @@
-## Machine_Learning_Project
+## Object clasification using SONAR signals
 
 - Install [python version 3.8](https://www.python.org) or above
 - Install python packages `scikit-learn`, `tqdm`, `matplotlib`
